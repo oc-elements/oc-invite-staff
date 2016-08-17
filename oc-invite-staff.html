@@ -1,6 +1,5 @@
 <link rel="import" href="../polymer/polymer.html">
 
-
 <link rel="import" href="../paper-button/paper-button.html">
 <link rel="import" href="../paper-dropdown-menu/paper-dropdown-menu.html">
 <link rel="import" href="../paper-listbox/paper-listbox.html">
@@ -11,7 +10,7 @@
 `oc-invite-staff`
 Element to facilitate staff invitations on the Ordercloud platform
 
-@demo demo/index.html 
+@demo demo/index.html
 -->
 
 <dom-module id="oc-invite-staff">
@@ -20,8 +19,30 @@ Element to facilitate staff invitations on the Ordercloud platform
       :host {
         display: block;
       }
+
+      paper-dropdown-menu {
+        display: block;
+      }
+
+      paper-button {
+        background-color: var(--primary-color);
+        color: #fff;
+        margin-top: 10px;
+        margin-bottom: 10px;
+      }
     </style>
-    <h2>Hello [[prop1]]</h2>
+
+    <gold-email-input auto-validate label="email" auto-float-label value="{{_email}}"></gold-email-input>
+    <paper-dropdown-menu label="Your favourite pastry" selected="{{_staffType}}" attr-for-selected="groupId">
+      <paper-listbox class="dropdown-content">
+        <paper-item group>Croissant</paper-item>
+        <paper-item>Donut</paper-item>
+        <paper-item>Financier</paper-item>
+        <paper-item>Madeleine</paper-item>
+      </paper-listbox>
+    </paper-dropdown-menu>
+    <paper-button raised on-tap="_sendInvite">Send Invite</paper-button>
+
   </template>
 
   <script>
@@ -30,11 +51,19 @@ Element to facilitate staff invitations on the Ordercloud platform
       is: 'oc-invite-staff',
 
       properties: {
-        prop1: {
-          type: String,
-          value: 'oc-invite-staff',
-        },
+        _email: String,
+        _staffType: Number,
+
       },
+
+      _sendInvite : function(e){
+        var params = {
+          emailAddress: this._email,
+          staffType: this._staffType
+        };
+
+//        this.fire("send-invite", params);
+      }
 
     });
   </script>
