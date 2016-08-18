@@ -64,7 +64,7 @@ Element to facilitate staff invitations on the Ordercloud platform
         if(emailValid && dropdownValid){
           var params = {
             emailAddress: this.email,
-            staffType: this.selectedItem.staffTypeId
+            groupId: this.selectedItem.staffTypeId
           };
 
           this.fire("invite-send", params);
