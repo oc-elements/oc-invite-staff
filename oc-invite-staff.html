@@ -32,13 +32,12 @@ Element to facilitate staff invitations on the Ordercloud platform
       }
     </style>
 
-    <gold-email-input auto-validate label="email" auto-float-label value="{{_email}}"></gold-email-input>
-    <paper-dropdown-menu label="Your favourite pastry" selected="{{_staffType}}" attr-for-selected="groupId">
+    <gold-email-input id="emailInput" auto-validate label="email" auto-float-label value="{{email}}" required error-message="please enter a valid email address"></gold-email-input>
+    <paper-dropdown-menu id="staffTypeInput" label="Staff Groups" selected-item="{{selectedItem}}" required error-message="please select an organisation">
       <paper-listbox class="dropdown-content">
-        <paper-item group>Croissant</paper-item>
-        <paper-item>Donut</paper-item>
-        <paper-item>Financier</paper-item>
-        <paper-item>Madeleine</paper-item>
+        <template is="dom-repeat" items="[[staffTypes]]">
+          <paper-item staff-type-id="[[item.id]]">[[item.name]]</paper-item>
+        </template>
       </paper-listbox>
     </paper-dropdown-menu>
     <paper-button raised on-tap="_sendInvite">Send Invite</paper-button>
@@ -51,18 +50,27 @@ Element to facilitate staff invitations on the Ordercloud platform
       is: 'oc-invite-staff',
 
       properties: {
-        _email: String,
-        _staffType: Number,
+        email: String,
+        staffTypes: Array,
 
       },
 
       _sendInvite : function(e){
-        var params = {
-          emailAddress: this._email,
-          staffType: this._staffType
-        };
 
-//        this.fire("send-invite", params);
+//        Validation needs to be done in this way for dropdown validation to fire
+        var emailValid = this.$.emailInput.validate(),
+                dropdownValid = this.$.staffTypeInput.validate();
+
+        if(emailValid && dropdownValid){
+          var params = {
+            emailAddress: this.email,
+            staffType: this.selectedItem.staffTypeId
+          };
+
+          this.fire("invite-send", params);
+        }
+
+
       }
 
     });
